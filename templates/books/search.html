@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock title %}
+
+{% block content %}
+<div class="bg-white py-6 px-4 md:px-8 min-h-screen">
+
+    <h1 class="text-3xl font-semibold mb-6">Search Results</h1>
+
+    <!-- Search Form -->
+    <div class="mb-6">
+        <form method="get" action="{% url 'books:search' %}" class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Search</button>
+        </form>
+    </div>
+
+    <!-- Books Section -->
+    <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Books</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for book in books %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <a href="{% url 'books:book_detail' book.id %}" class="text-blue-600 font-semibold hover:text-blue-800">
+                        <h3 class="text-lg">{{ book.title }}</h3>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <p>No books found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Authors Section -->
+    <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Authors</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for author in authors %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <a href="{% url 'books:author_detail' author.id %}" class="text-blue-600 font-semibold hover:text-blue-800">
+                        <h3 class="text-lg">{{ author.first_name }}</h3>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <p>No authors found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Genres Section -->
+    <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Genres</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for genre in genres %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <a href="{% url 'books:genre_detail' genre.id %}" class="text-blue-600 font-semibold hover:text-blue-800">
+                        <h3 class="text-lg">{{ genre.name }}</h3>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <p>No genres found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Categories</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for category in categories %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <a href="{% url 'books:category_detail' category.id %}" class="text-blue-600 font-semibold hover:text-blue-800">
+                        <h3 class="text-lg">{{ category.name }}</h3>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="card bg-white shadow-lg rounded-lg p-4">
+                    <p>No categories found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

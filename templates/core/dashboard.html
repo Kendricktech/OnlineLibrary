@@ -1,0 +1,484 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 ">
+    <a href="#"><button class="button-form bg-lime-50">Profile</button></a>
+
+</div>
+<div class="container mt-5 hidden">
+    <!-- Site Top 10 Section -->
+    <h2>Site Top 10</h2>
+    <div class="row">
+      <!-- Top 10 Books -->
+      <div class="col-md-3">
+        <h4>Top 10 Books</h4>
+        {% for book in site_book_visits %}
+          <div class="card mb-3">
+            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">{{ book.title }}</h5>
+              <p class="card-text">Visits: {{ book.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Top 10 Authors -->
+      <div class="col-md-3">
+        <h4>Top 10 Authors</h4>
+        {% for author in site_author_visits %}
+          <div class="card mb-3">
+            <img src="{{ author.image.url }}" alt="{{ author.first_name }}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">{{ author.first_name }}</h5>
+              <p class="card-text">Visits: {{ author.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Top 10 Genres -->
+      <div class="col-md-3">
+        <h4>Top 10 Genres</h4>
+        {% for genre in site_genre_visits %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ genre.name }}</h5>
+              <p class="card-text">Visits: {{ genre.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Top 10 Categories -->
+      <div class="col-md-3">
+        <h4>Top 10 Categories</h4>
+        {% for category in site_category_visits %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ category.name }}</h5>
+              <p class="card-text">Visits: {{ category.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- User Top 10 Section -->
+    <h2>Your Top 10</h2>
+    <div class="row">
+      <!-- User's Top 10 Books -->
+      <div class="col-md-3">
+        <h4>Your Top 10 Books</h4>
+        {% for book in user_book_visits %}
+          <div class="card mb-3">
+            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">{{ book.title }}</h5>
+              <p class="card-text">Visits: {{ book.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- User's Top 10 Authors -->
+      <div class="col-md-3">
+        <h4>Your Top 10 Authors</h4>
+        {% for author in user_author_visits %}
+          <div class="card mb-3">
+            <img src="{{ author.image.url }}" alt="{{ author.first_name }}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">{{ author.first_name }}</h5>
+              <p class="card-text">Visits: {{ author.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- User's Top 10 Genres -->
+      <div class="col-md-3">
+        <h4>Your Top 10 Genres</h4>
+        {% for genre in user_genre_visits %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ genre.name }}</h5>
+              <p class="card-text">Visits: {{ genre.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- User's Top 10 Categories -->
+      <div class="col-md-3">
+        <h4>Your Top 10 Categories</h4>
+        {% for category in user_category_visits %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ category.name }}</h5>
+              <p class="card-text">Visits: {{ category.visit_count }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-- Site-Wide Insights Section -->
+<h2 class="text-xl font-semibold mb-4 text-white text-center">Site-Wide Insights</h2>
+<div class="grid md:grid-cols-4 gap-4">
+    <div class="bg-blue-50 rounded-lg p-4 flex items-center justify-center">
+        <canvas id="siteBookVisitChart" class="center-block"></canvas>
+    </div>
+    <div class="bg-blue-50 rounded-lg p-4 flex items-center justify-center">
+        <canvas id="siteAuthorVisitChart"></canvas>
+    </div>
+    <div class="bg-blue-50 rounded-lg p-4 flex items-center justify-center">
+        <canvas id="siteGenreVisitChart"></canvas>
+    </div>
+    <div class="bg-blue-50 rounded-lg p-4 flex items-center justify-center">
+        <canvas id="siteCategoryVisitChart"></canvas>
+    </div>
+</div>
+
+
+<!-- User Insights Section -->
+<h2 class="text-xl font-semibold mb-4 text-white text-center">Your Personal Insights</h2>
+<div class="grid md:grid-cols-4 gap-4">
+    <div class="bg-green-50 rounded-lg p-4">
+        <canvas id="userBookVisitChart"></canvas>
+    </div>
+    <div class="bg-green-50 rounded-lg p-4">
+        <canvas id="userAuthorVisitChart"></canvas>
+    </div>
+    <div class="bg-green-50 rounded-lg p-4">
+        <canvas id="userGenreVisitChart"></canvas>
+    </div>
+    <div class="bg-green-50 rounded-lg p-4">
+        <canvas id="userCategoryVisitChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function createPieChart(elementId, data, title, modelType) {
+    return new Chart(document.getElementById(elementId).getContext('2d'), {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: title
+                },
+                legend: {
+                    position: 'top',  
+                    labels: {
+                        boxWidth: 20, 
+                        padding: 15     
+                    }
+                }
+            },
+            onClick: function(evt) {
+                var activePoints = this.getElementsAtEvent(evt);
+                if (activePoints.length > 0) {
+                    var index = activePoints[0].index;
+                    var label = data.labels[index];  // Get the label (e.g., book title, author name)
+
+                    // Fetch the corresponding book's primary key (or other identifier) for redirection
+                    var pk = getBookPrimaryKey(label); // Function to map the label to the pk
+
+                    if (pk) {
+                        // Redirect to the book detail page
+                        window.location.href = '/books/model_detail/' + pk + '/';
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Function to map the label (e.g., book title) to the book's primary key (pk)
+function getBookPrimaryKey(label) {
+    var bookData = {
+        'Book Title 1': 1,
+        'Book Title 2': 2,
+        // Add more mappings for other book titles
+    };
+
+    return bookData[label] || null;
+}
+
+
+    // Site Insights Charts
+    createPieChart('siteBookVisitChart', {
+        labels: {{ book_labels|safe }},
+        datasets: [{
+            label: 'Book Visits (Site)',
+            data: {{ site_book_visits|safe }},
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Site Book Visits');
+
+    createPieChart('siteAuthorVisitChart', {
+        labels: {{ author_labels|safe }},
+        datasets: [{
+            label: 'Author Visits (Site)',
+            data: {{ site_author_visits|safe }},
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Site Author Visits');
+
+    createPieChart('siteGenreVisitChart', {
+        labels: {{ genre_labels|safe }},
+        datasets: [{
+            label: 'Genre Visits (Site)',
+            data: {{ site_genre_visits|safe }},
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Site Genre Visits');
+
+    createPieChart('siteCategoryVisitChart', {
+        labels: {{ category_labels|safe }},
+        datasets: [{
+            label: 'Category Visits (Site)',
+            data: {{ site_category_visits|safe }},
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Site Category Visits');
+
+    // User Insights Charts
+    createPieChart('userBookVisitChart', {
+        labels: {{ book_labels|safe }},
+        datasets: [{
+            label: 'Book Visits (User)',
+            data: {{ user_book_visits|safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Your Book Visits');
+
+    createPieChart('userAuthorVisitChart', {
+        labels: {{ author_labels|safe }},
+        datasets: [{
+            label: 'Author Visits (User)',
+            data: {{ user_author_visits|safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Your Author Visits');
+
+    createPieChart('userGenreVisitChart', {
+        labels: {{ genre_labels|safe }},
+        datasets: [{
+            label: 'Genre Visits (User)',
+            data: {{ user_genre_visits|safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Your Genre Visits');
+
+    createPieChart('userCategoryVisitChart', {
+        labels: {{ category_labels|safe }},
+        datasets: [{
+            label: 'Category Visits (User)',
+            data: {{ user_category_visits|safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(155, 89, 182, 0.6)',
+                'rgba(46, 204, 113, 0.6)',
+                'rgba(52, 152, 219, 0.6)',
+                'rgba(241, 196, 15, 0.6)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(155, 89, 182, 1)',
+                'rgba(46, 204, 113, 1)',
+                'rgba(52, 152, 219, 1)',
+                'rgba(241, 196, 15, 1)',
+            ],
+            borderWidth: 1
+        }]
+    }, 'Your Category Visits');
+</script>
+{% endblock  %}

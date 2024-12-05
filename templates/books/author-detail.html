@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ author.first_name }}{% endblock title %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-4">Author: {{ author.first_name }}</h1>
+
+<h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Books by {{ author.first_name }}</h2>
+
+<div class="max-w-3xl mx-auto px-4 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <!-- Author Card -->
+    <div class="card card-compact w-full bg-base-100 shadow-xl mb-6">
+        <figure>
+            {% if author.image %}
+                <img src="{{ author.image.url }}" alt="{{ author.first_name }}" class="object-cover h-48 w-full rounded-t-lg" />
+            {% else %}
+                <img src="{{ '/media/uploads/users/images/default.png' }}" alt="Default Image" class="object-cover h-48 w-full rounded-t-lg" />
+            {% endif %}
+        </figure>
+        <div class="card-body">
+            <h2 class="card-title text-2xl font-semibold text-gray-900 dark:text-white">{{ author.first_name }} {{ author.last_name }}</h2>
+            <p class="text-gray-600 dark:text-gray-300">{{ author.bio|default:"This author has not provided a biography." }}</p>
+        </div>
+    </div>
+
+    <!-- Genres and Categories -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Genres and Categories:</h3>
+        <div class="mt-4">
+            <div class="mb-4">
+                <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300">Genres:</h4>
+                <ul class="flex flex-wrap space-x-2">
+                    {% for genre in genres %}
+                        <li class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 px-3 py-1 rounded-full shadow-sm">
+                            {{ genre.name }}
+                        </li>
+                    {% empty %}
+                        <li class="text-gray-500 dark:text-gray-400">No genres found for this author's books.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300">Categories:</h4>
+                <ul class="flex flex-wrap space-x-2">
+                    {% for category in categories %}
+                        <li class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 px-3 py-1 rounded-full shadow-sm">
+                            {{ category.name }}
+                        </li>
+                    {% empty %}
+                        <li class="text-gray-500 dark:text-gray-400">No categories found for this author's books.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book List -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Books:</h3>
+        <ul class="space-y-4 mt-4">
+            {% for book in page_obj %}
+                <li class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm hover:shadow-lg">
+                    <a href="{% url 'books:book_detail' book.id %}" class="text-lg font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                        {{ book.title }}
+                    </a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500 dark:text-gray-400">No books found for this author.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-center mt-4">
+        <span class="mr-2">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        <div class="flex space-x-2">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Previous</a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

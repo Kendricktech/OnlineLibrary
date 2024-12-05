@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
+<!-- Aggregated Data for Admin -->
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Most Visited Books (All Users)</h2>
+    <div class="space-y-4">
+        {% for book in books %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ book.title }}</div>
+                <div class="text-gray-500">{{ book.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Most Visited Authors (All Users)</h2>
+    <div class="space-y-4">
+        {% for author in authors %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ author.name }}</div>
+                <div class="text-gray-500">{{ author.total_visits }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Most Visited Genres (All Users)</h2>
+    <div class="space-y-4">
+        {% for genre in genres %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ genre.name }}</div>
+                <div class="text-gray-500">{{ genre.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Most Visited Categories (All Users)</h2>
+    <div class="space-y-4">
+        {% for category in categories %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ category.name }}</div>
+                <div class="text-gray-500">{{ category.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Most Visited Publishers (All Users)</h2>
+    <div class="space-y-4">
+        {% for publisher in publishers %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ publisher.name }}</div>
+                <div class="text-gray-500">{{ publisher.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<hr class="my-8 border-t-2 border-gray-200">
+
+<!-- Admin's Own Data (Same as for Normal User) -->
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Your Most Visited Genres</h2>
+    <div class="space-y-4">
+        {% for genre in admin_genres %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ genre.name }}</div>
+                <div class="text-gray-500">{{ genre.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Your Most Visited Categories</h2>
+    <div class="space-y-4">
+        {% for category in admin_categories %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ category.name }}</div>
+                <div class="text-gray-500">{{ category.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Your Most Visited Authors</h2>
+    <div class="space-y-4">
+        {% for author in admin_authors %}
+            <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+                <div class="font-semibold text-lg">{{ author.name }}</div>
+                <div class="text-gray-500">{{ author.visit_count }} visits</div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('myChart');
+
+    const books = {{ books|json_script:"books" }};
+    const bookTitles = books.map(book => book.title);
+    const bookVisitCounts = books.map(book => book.visit_count);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: bookTitles,
+            datasets: [{
+                label: 'Visit Counts of Books',
+                data: bookVisitCounts,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

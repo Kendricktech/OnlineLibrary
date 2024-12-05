@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <h1>User Dashboard</h1>
+
+    <h2>Books Visited</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Visit Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books_visited %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.visit_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Genres Visited</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Genre</th>
+                <th>Visit Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for genre in genres_visited %}
+            <tr>
+                <td>{{ genre.name }}</td>
+                <td>{{ genre.visit_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Categories Visited</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Visit Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories_visited %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>{{ category.visit_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Authors Visited</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Author</th>
+                <th>Visit Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for author in authors_visited %}
+            <tr>
+                <td>{{ author.first_name }} {{ author.last_name }}</td>
+                <td>{{ author.visit_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

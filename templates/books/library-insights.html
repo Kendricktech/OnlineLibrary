@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Insights</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Library Insights</h1>
+
+    <!-- Chart Containers -->
+    <div>
+        <h2>Books Visit Counts</h2>
+        <canvas id="booksChart"></canvas>
+    </div>
+    <div>
+        <h2>Authors Visit Counts</h2>
+        <canvas id="authorsChart"></canvas>
+    </div>
+    <div>
+        <h2>Genres Visit Counts</h2>
+        <canvas id="genresChart"></canvas>
+    </div>
+    <div>
+        <h2>Categories Visit Counts</h2>
+        <canvas id="categoriesChart"></canvas>
+    </div>
+
+    <script>
+        // Parse the visit data passed from Django view
+        const visitData = JSON.parse('{{ visit_data|escapejs }}');
+
+        // Function to create a chart
+        function createChart(chartId, labels, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',  // Choose a chart type (bar, line, etc.)
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Visit Count',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',  // Bar color
+                        borderColor: 'rgba(54, 162, 235, 1)',  // Bar border color
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Books Chart Data
+        const bookTitles = visitData.books.map(book => book.title);
+        const bookVisitCounts = visitData.books.map(book => book.visit_count);
+        createChart('booksChart', bookTitles, bookVisitCounts);
+
+        // Authors Chart Data
+        const authorNames = visitData.authors.map(author => author.name);
+        const authorVisitCounts = visitData.authors.map(author => author.visit_count);
+        createChart('authorsChart', authorNames, authorVisitCounts);
+
+        // Genres Chart Data
+        const genreNames = visitData.genres.map(genre => genre.name);
+        const genreVisitCounts = visitData.genres.map(genre => genre.visit_count);
+        createChart('genresChart', genreNames, genreVisitCounts);
+
+        // Categories Chart Data
+        const categoryNames = visitData.categories.map(category => category.name);
+        const categoryVisitCounts = visitData.categories.map(category => category.visit_count);
+        createChart('categoriesChart', categoryNames, categoryVisitCounts);
+    </script>
+</body>
+</html>

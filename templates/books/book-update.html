@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Update Book: {{ object.title }}{% endblock title %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-base-200">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h4 class="card-title text-2xl font-semibold text-gray-800">Update Book</h4>
+      <p class="text-gray-600">Editing details for: <strong>{{ object.title }}</strong></p>
+
+      <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        
+        {% for field in form %}
+          <div class="form-control mb-4">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+              <p class="text-red-600 text-sm">{{ field.errors|join:", " }}</p>
+            {% endif %}
+          </div>
+          <hr class="my-4"> <!-- Visually separates each field -->
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary w-full mt-6">Update Book</button>
+      </form>
+
+      <!-- Authors Pagination -->
+      <div class="mt-4">
+        <h5 class="text-xl font-semibold">Authors</h5>
+        {% if authors_page.has_other_pages %}
+          <div class="flex justify-between">
+            {% if authors_page.has_previous %}
+              <a href="?authors_page={{ authors_page.previous_page_number }}&genres_page={{ genres_page.number }}&categories_page={{ categories_page.number }}" class="btn btn-link">Previous</a>
+            {% endif %}
+            {% if authors_page.has_next %}
+              <a href="?authors_page={{ authors_page.next_page_number }}&genres_page={{ genres_page.number }}&categories_page={{ categories_page.number }}" class="btn btn-link">Next</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      <hr class="my-4"> <!-- Visual separator for authors pagination -->
+
+      <!-- Genres Pagination -->
+      <div class="mt-4">
+        <h5 class="text-xl font-semibold">Genres</h5>
+        {% if genres_page.has_other_pages %}
+          <div class="flex justify-between">
+            {% if genres_page.has_previous %}
+              <a href="?authors_page={{ authors_page.number }}&genres_page={{ genres_page.previous_page_number }}&categories_page={{ categories_page.number }}" class="btn btn-link">Previous</a>
+            {% endif %}
+            {% if genres_page.has_next %}
+              <a href="?authors_page={{ authors_page.number }}&genres_page={{ genres_page.next_page_number }}&categories_page={{ categories_page.number }}" class="btn btn-link">Next</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      <hr class="my-4"> <!-- Visual separator for genres pagination -->
+
+      <!-- Categories Pagination -->
+      <div class="mt-4">
+        <h5 class="text-xl font-semibold">Categories</h5>
+        {% if categories_page.has_other_pages %}
+          <div class="flex justify-between">
+            {% if categories_page.has_previous %}
+              <a href="?authors_page={{ authors_page.number }}&genres_page={{ genres_page.number }}&categories_page={{ categories_page.previous_page_number }}" class="btn btn-link">Previous</a>
+            {% endif %}
+            {% if categories_page.has_next %}
+              <a href="?authors_page={{ authors_page.number }}&genres_page={{ genres_page.number }}&categories_page={{ categories_page.next_page_number }}" class="btn btn-link">Next</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      <hr class="my-4"> <!-- Visual separator for categories pagination -->
+
+      <div class="flex justify-between mt-6">
+        <a href="{% url 'books:book_detail' object.pk %}" class="btn btn-link">Back to Book Details</a>
+        <a href="{% url 'books:book_list' %}" class="btn btn-link">Back to Book List</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

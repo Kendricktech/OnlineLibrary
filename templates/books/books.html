@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Books{% endblock title %}
+
+{% block content %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <form method="get">
+        <label for="category">Category</label>
+        <select name="category" id="category">
+            <option value="">Select a Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == request.GET.category %} selected {% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="genre">Genre</label>
+        <select name="genre" id="genre">
+            <option value="">Select a Genre</option>
+            {% for genre in genres %}
+                <option value="{{ genre.id }}" {% if genre.id == request.GET.genre %} selected {% endif %}>
+                    {{ genre.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {% for book in books %}
+    <div>
+        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <a href="{% url 'books:book_detail' book.id %}">
+                <img class="rounded-t-lg" 
+                     src="{{ book.image.url|default:'/media/uploads/books/images/default.png' }}" 
+                     alt="{{ book.title }}" />
+            </a>
+            <div class="p-5">
+                <a href="{% url 'books:book_detail' book.id %}">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ book.title }}</h5>
+                </a>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    {{ book.description|default:"No description available." }}
+                </p>
+                <a href="{% url 'books:book_detail' book.id %}" class="inline-flex items-center text-blue-600 hover:underline">
+                    Book Detail
+                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if is_paginated %}
+    <div class="flex justify-center mt-4 col-span-full">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="button mb-4 mx-1">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="button mb-4 mx-1">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="button mb-4 mx-1 bg-blue-500 text-white">{{ num }}</span>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                <a href="?page={{ num }}" class="button mb-4 mx-1">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="button mb-4 mx-1">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="button mb-4 mx-1">Last</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

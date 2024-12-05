@@ -1,0 +1,94 @@
+<header id="navbar" class="bg-green-950  w-full top-0 left-0 z-50 ">
+  <nav class="container flex items-center justify-between h-16 sm:h-20 px-4">
+    <!-- Logo Section with Book Icon -->
+    <div class="font-Lobster text-white sm:text-2xl md:text-3xl lg:text-4xl flex items-center gap-2">
+      <i class="ri-book-line text-white animate-move"></i> <!-- Book Icon -->
+      <span>Open Library</span>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="nav-menu" class="absolute top-0 left-[-100%] min-h-[80vh] w-full bg-green-950/80 backdrop-blur-sm flex items-center justify-center duration-300 overflow-hidden lg:static lg:min-h-fit lg:bg-transparent lg:w-auto z-50">
+      <ul class="flex flex-col items-center gap-8 lg:flex-row">
+        <li><a href="{% url "index" %}" class="nav-link text-white hover:text-green-300">Home</a></li>
+        <li><a href="#about" class="nav-link text-white hover:text-green-300">Explore</a></li>
+        <li><a href="#popular" class="nav-link text-white hover:text-green-300">Popular</a></li>
+        {% if not user.is_authenticated %}
+        <li><a href="{% url 'accounts:login' %}" class="nav-link text-white hover:text-green-300">Sign in</a></li>
+        {% else %}
+        <li><a href="{% url "dashboard" %}" class="nav-link text-white hover:text-green-300">Dashboard</a></li>
+        
+        <li><form action="{% url 'accounts:logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="nav-link text-white hover:text-green-300">Log Out</button>
+        </form></li>
+
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- Hamburger Icon for Mobile Toggle -->
+    <div class="text-xl sm:text-3xl lg:hidden text-white cursor-pointer z-50" id="hamburger" aria-expanded="false">
+      <i class="ri-menu-4-line"></i>
+    </div>
+
+    <!-- Button to Toggle Dropdown Section on Mobile -->
+    <div class="lg:hidden">
+      <button id="dropdownToggle" class="text-white hover:text-green-300" aria-expanded="false">Options ▼</button>
+    </div>
+  </nav>
+
+  <!-- Dropdown Section for Search and Other Options -->
+  <div id="dropdownSection" class="hidden lg:block bg-green-800 text-white py-4">
+    <div class="container mx-auto flex flex-col items-center gap-4 sm:flex-row sm:justify-between px-4">
+      
+      <!-- Search Form -->
+      <form action="{% url "books:search" %}" method="get" class="relative w-full max-w-md">
+        <input type="text" name="query" placeholder="Search" class="w-full px-4 py-2 rounded-full focus:outline-none text-green-950">
+        <button type="submit" class="absolute right-0 top-0 px-4 py-2 text-white bg-green-900 rounded-r-full hover:bg-green-700">🔍</button>
+      </form>
+
+      <!-- Additional Options (example links) -->
+      <div class="flex gap-4">
+        <a href="#settings" class="hover:text-green-300">Settings</a>
+        <a href="#help" class="hover:text-green-300">Help</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- JavaScript for Toggle Functionality -->
+<script>
+const navMenu = document.getElementById("nav-menu");
+const navLinks = document.querySelectorAll(".nav-link");
+const hamburger = document.getElementById("hamburger");
+const dropdownToggle = document.getElementById("dropdownToggle");
+const dropdownSection = document.getElementById("dropdownSection");
+
+// Toggle mobile menu visibility
+hamburger.addEventListener("click", () => {
+    const isExpanded = hamburger.getAttribute("aria-expanded") === "true";
+    hamburger.setAttribute("aria-expanded", !isExpanded);
+    navMenu.classList.toggle("left-[0]");
+    hamburger.classList.toggle("ri-close-line");
+    hamburger.classList.toggle("ri-menu-4-line");
+});
+
+// Close menu when clicking any navigation link
+navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+        if (navMenu.classList.contains("left-[0]")) {
+            navMenu.classList.toggle("left-[0]");
+            hamburger.classList.toggle("ri-menu-4-line");
+            hamburger.classList.toggle("ri-close-line");
+            hamburger.setAttribute("aria-expanded", "false");
+        }
+    });
+});
+
+// Toggle dropdown section on mobile
+dropdownToggle.addEventListener("click", () => {
+    const isExpanded = dropdownToggle.getAttribute("aria-expanded") === "true";
+    dropdownToggle.setAttribute("aria-expanded", !isExpanded);
+    dropdownSection.classList.toggle("hidden");
+});
+</script>

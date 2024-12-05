@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-base-200">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h4 class="card-title text-2xl font-semibold text-gray-800">Log In</h4>
+      <p class="text-gray-600">Welcome back! Enter your details to log in.</p>
+      
+      <form class="mt-4" action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %} <!-- CSRF token for security -->
+
+        <div>
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+      </div>
+        
+        <!-- Username or Email -->
+        <div class="form-control mb-4">
+          <label class="label">
+            <span class="label-text">Username or Email</span>
+          </label>
+          <input type="text" name="username" placeholder="Your Username or Email" class="input input-bordered w-full bg-base-100" required />
+        </div>
+        
+        <!-- Password -->
+        <div class="form-control mb-4 relative">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input type="password" name="password" placeholder="Your Password" class="input input-bordered w-full bg-base-100" id="passwordField" required />
+          <!-- Eye Icon for Toggling Password Visibility -->
+          <i class="ri-eye-off-line absolute right-3 top-10 cursor-pointer text-gray-500" id="togglePassword"></i>
+        </div>
+        
+        <!-- Remember Me -->
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <input type="checkbox" class="checkbox checkbox-primary" id="rememberMe" />
+            <span class="label-text ml-2">Remember Me</span>
+          </label>
+        </div>
+        
+        <!-- Submit Button -->
+        <button class="btn btn-primary w-full mt-6" type="submit">Log In</button>
+        
+        <!-- Forgot Password Link -->
+        <p class="text-center mt-4 text-gray-600">
+          Forgot your password? 
+          <a href="{% url 'accounts:password_reset' %}" class="text-primary font-semibold underline">Reset it</a>
+        </p>
+
+        <!-- Sign up Link -->
+        <p class="text-center mt-4 text-gray-600">
+          Don’t have an account?
+          <a href="{% url 'accounts:signup' %}" class="text-primary font-semibold underline">Sign up</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Password Toggle -->
+<script>
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordField = document.getElementById("passwordField");
+
+  togglePassword.addEventListener("click", () => {
+    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
+    togglePassword.classList.toggle("ri-eye-line");
+    togglePassword.classList.toggle("ri-eye-off-line");
+  });
+</script>
+{% endblock content %}
